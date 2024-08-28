@@ -1,7 +1,7 @@
 
 import { getDatabase, set, ref, update } from "firebase/database";
 import { useState } from "react";
-import { app } from "../Firebase";
+import { app } from "../FirebaseDetails";
 import { useLocation, useNavigate } from "react-router-dom";
 
 // 1

@@ -2,7 +2,7 @@
 
 import { getDatabase, set, ref } from "firebase/database";
 import { useState } from "react";
-import {app} from "../Firebase"
+import {app} from "../FirebaseDetails"
 import { useNavigate } from "react-router-dom";
 
 import {getStorage, ref as employeeRef, uploadBytes, getDownloadURL} from "firebase/storage"

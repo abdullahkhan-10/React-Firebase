@@ -1,6 +1,6 @@
 
 import{ getDatabase, ref, onValue, remove} from "firebase/database"
-import {app} from "../Firebase"
+import {app} from "../FirebaseDetails"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
