@@ -97,3 +97,20 @@
   background: #fff;
   
 }
+
+.social-login{
+  background: rgb(219, 140, 140);
+  width: 40%;
+  height: 20vh;
+  padding: 30px;
+  border-radius: 20px;
+}
+.social-login button{
+  padding: 10px 20px;
+  margin: 5px 5px;
+  border-radius: 5px;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  
+}

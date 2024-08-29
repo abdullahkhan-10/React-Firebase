@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider } from "firebase/auth"
 import {app} from "../Firebase"
 import { useNavigate } from 'react-router-dom'
 
@@ -45,8 +45,22 @@ const Login = () => {
     // 3. Login with facebook feature.
     // it will not work, beacause at the time I had issue with meta developer account.
     const facebookLogin = () =>{
-        const facebookAuth = getAuth(app)
+        const githubAuth = getAuth(app)
         const provider = new FacebookAuthProvider()
+        signInWithPopup(githubAuth,provider)
+        .then( (data) =>{
+            console.log(data);
+            navigate('/dashboard')
+        })
+        .catch( (err) =>{
+            console.log(err);
+        })
+    }
+
+    // 3. Login with Github feature.
+    const githubkLogin = () =>{
+        const facebookAuth = getAuth(app)
+        const provider = new GithubAuthProvider()
         signInWithPopup(facebookAuth,provider)
         .then( (res) =>{
             console.log(res);
@@ -66,13 +80,17 @@ const Login = () => {
 
         </form>
         <br />
+        <div className='social-login'>
+            {/* Login with Google */}
+            <button onClick={googleLogin} type='button'>Login with Google</button>
 
-        {/* Login with Google */}
-        <button onClick={googleLogin} type='button'>Login with Google</button>
+            {/* Login with Facebook */}
+            {/* it will not work, beacause at the time I had issue with meta developer account. */}
+            <button onClick={facebookLogin} type='button'>Login with Facebook</button>
 
-        {/* Login with Facebook */}
-        {/* it will not work, beacause at the time I had issue with meta developer account. */}
-        <button onClick={facebookLogin} type='button'>Login with Facebook</button>
+            {/* Login with Github */}
+            <button onClick={githubkLogin} type='button'>Login with Github</button>
+        </div>
         
     </div>
   )
