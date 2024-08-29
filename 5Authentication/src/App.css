@@ -92,7 +92,7 @@
   background: rgb(185, 28, 28);
 }
 
-.auth-page :hover{
+.auth-page a :hover{
   color: #333;
   background: #fff;
   
