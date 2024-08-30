@@ -101,9 +101,10 @@
 .social-login{
   background: rgb(219, 140, 140);
   width: 40%;
-  height: 20vh;
-  padding: 30px;
+  height: 15vh;
+  padding: 25px;
   border-radius: 20px;
+  margin-bottom: 15px;
 }
 .social-login button{
   padding: 10px 20px;

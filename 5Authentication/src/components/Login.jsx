@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
 import {app} from "../Firebase"
 import { useNavigate } from 'react-router-dom'
 
@@ -7,6 +7,12 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
+    // for  OTP
+    const [phone, setPhone] = useState(null)
+    // to hide login with OTP
+    const [isOtp, setIsOtp] = useState(false)
+    // To confirm OTP 
+    const [otpCode, setOtpCode] = useState(null)
 
     // 1. Login with Email and Password
     const handleSubmit = (e) =>{
@@ -22,7 +28,7 @@ const Login = () => {
             navigate("/dashboard")
         })
         .catch( (err) =>{
-            console.log(err);
+            console.log("Errore occured", err);
             
         })
     }
@@ -34,11 +40,11 @@ const Login = () => {
         const provider = new GoogleAuthProvider()
         signInWithPopup(googleAuth,provider)
         .then( (info) =>{
-            console.log(info);
+            // console.log(info);
             navigate("/dashboard")
         })
         .catch( (err) =>{
-            console.log(err);
+            console.log("Errore occured", err);
         })
     }
 
@@ -49,11 +55,11 @@ const Login = () => {
         const provider = new FacebookAuthProvider()
         signInWithPopup(githubAuth,provider)
         .then( (data) =>{
-            console.log(data);
+            // console.log(data);
             navigate('/dashboard')
         })
         .catch( (err) =>{
-            console.log(err);
+            console.log("Errore occured", err);
         })
     }
 
@@ -63,13 +69,45 @@ const Login = () => {
         const provider = new GithubAuthProvider()
         signInWithPopup(facebookAuth,provider)
         .then( (res) =>{
-            console.log(res);
+            // console.log(res);
             navigate('/dashboard')
         })
         .catch( (err) =>{
-            console.log(err);
+            console.log("Errore occured", err);
         })
     }
+
+    // 4. Login with OTP 
+    const sendOTP = ()=>{
+        const myAuth = getAuth(app)
+        // we  will pass three arguments to this method. 1 instance of auth, 2 id and 3 an object on which we menstion instructions for recaptcha.
+        const appVerifier = new RecaptchaVerifier(myAuth, 'abc',{})  // this line is to create recaptcha.
+        signInWithPhoneNumber( myAuth, phone, appVerifier)
+        .then( (data) =>{
+            console.log(data);
+            console.log("OTP Sent");
+            // to confirm OTP 
+            window.confirmationResult = data
+            setIsOtp(true)  
+        })
+        .catch( (err) =>{
+            console.log("Errore occured", err); 
+        })
+    }
+
+    // Confirm OTP
+    const confirmOTP = ()=>{
+        window.confirmationResult.confirm(otpCode)
+        .then( (res) =>{
+            console.log(res);
+            navigate("/dashboard")
+        })
+        .catch( (err) =>{
+            console.log("Errore occured", err);
+            
+        })
+    }
+
   return (
     <div>
         <h1>Login</h1>
@@ -91,6 +129,27 @@ const Login = () => {
             {/* Login with Github */}
             <button onClick={githubkLogin} type='button'>Login with Github</button>
         </div>
+        <br />
+
+        {/* Login with OTP */}
+        {!isOtp?
+            //  if isOtp not true mean false which we have initially set in useState then display this div. if it is true display the below div.
+            // the isOtp become true when we login as OTP.
+            <div>
+            <h2>Login with OTP</h2>
+            <input onChange={ (e)=>{setPhone(e.target.value)}}  placeholder='Phone Number'/>
+            <div id='abc'></div>
+            <button type="button" onClick={sendOTP}>Send OTP</button>
+        </div>
+        :
+        //  to confirm OTP 
+        <div>
+            <h2>Confirm OTP</h2>
+            <input onChange={ (e) =>{setOtpCode(e.target.value)}} placeholder='OTP' />
+            <button type="button" onClick={confirmOTP}>submit OTP</button>
+        </div>
+        }
+        
         
     </div>
   )
